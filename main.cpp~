@@ -1,0 +1,39 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int getLeft(int);
+int getRight(int);
+
+int main(){
+  while(true){
+    cout << "Input a valid command (ADD, DLT, DLTALL, PRINT)" << endl;
+    char input[10];
+    cin >> input;
+    if(strcmp(input, "ADD") == 0){
+      cout << "Add by user (U) or file input (F)?" << endl;
+      cin >> input;
+      if(strcmp(input, "U") == 0){
+	cout << getLeft(2) << endl;
+      }else if(strcmp(input, "F") == 0){
+
+      }
+    }else if(strcmp(input, "DLT") == 0){
+      
+    }else if(strcmp(input, "DLTALL") == 0){
+
+    }else if(strcmp(input, "PRINT") == 0){
+
+    }
+  }
+  return 0;
+}
+
+int getLeft(int i){
+  return i*2;
+}
+
+int getRight(int i){
+  return i*2+1;
+}

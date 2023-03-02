@@ -1,3 +1,10 @@
+/* Xander Siruno-Nebel
+   C++/Data Structures, Galbraith
+   3/1/2023
+
+   Heap: implementation of a max heap (binary tree in which each child is less than the parent) in C++
+ */
+
 #include <iostream>
 #include <cstring>
 #include <fstream>
@@ -103,6 +110,7 @@ int* pop(int* tree, int i){
   int left = tree[getLeft(i)];
   int right = tree[getRight(i)];
   int greatest = 0;
+  //goes from top of tree to bottom through highest child, setting each parent to its child
   if(left > right){
     greatest = left;
   }else{
@@ -151,6 +159,7 @@ int getLast(int* tree){
 }
 
 int* add(int num, int* tree){
+  //pretty boilerplate, real stuff in checkAdd
   int i = getLast(tree);
   tree[i] = num;
   tree = checkAdd(num, tree, i);
@@ -176,6 +185,7 @@ int getParent(int i){
 }
 
 int* clear(int* tree){
+  //init arr
   for(int i = 0; i <= 101; i++){
     tree[i] = -1;
   }

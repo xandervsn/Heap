@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <fstream>
 
 using namespace std;
 
@@ -14,6 +15,7 @@ int getLast(int*);
 void print(int*, int);
 
 int main(){
+  srand(time(0));
   int* tree = new int[101];
   tree = clear(tree);
   while(true){
@@ -24,57 +26,99 @@ int main(){
       cout << "Add by user (U) or file input (F)?" << endl;
       cin >> input;
       if(strcmp(input, "U") == 0){
-        int uin;
-        cin >> uin;
-        tree = add(uin, tree);
-        //cout << tree[1] << endl;
+	int intin = 0;
+	cin >> intin;
+        tree = add(intin, tree);
       }else if(strcmp(input, "F") == 0){
+	cout << "How many numbers to add? (0-50)" << endl;
+	int intin = 0;
+	cin >> intin;
 
+	for(int i = 0; i < intin; i++){
+	  //follwing code taken from Hashmap
+	  ifstream firstFile;
+	  firstFile.open("nums.txt");
+	  char arr[100][50];
+	  int j = 0;
+	  while(firstFile.getline(arr[j], 49, ' ')){
+	    j++;
+	  }
+	  //pick random name from created char* array above
+	  int random = rand() % 10;
+	  //turn that char* into an int
+	  int num = atoi(arr[random]);
+	  tree = add(num, tree);
+	}
       }
     }else if(strcmp(input, "DLT") == 0){
+      if(tree[1] == -1){
+	cout << "This heap is empty!" << endl;
+      }else{
+	cout << tree[1] << endl;
+      }
       tree = pop(tree, 1);
     }else if(strcmp(input, "DLTALL") == 0){
-
+      //slight redunancy, otherwise some nums not popped
+      for(int i = 0; i <= 100; i++){
+	//if a node has a value, print it, then pop
+	if(tree[1] != -1){
+	  cout << tree[1] << endl;
+	}
+	tree = pop(tree, 1);
+      }
     }else if(strcmp(input, "PRINT") == 0){
-      cout << "(" << tree[1] << ")" << endl;
-      print(tree, 1);
+      if(tree[1] == -1){
+        cout << "This heap is empty!" << endl;
+      }else{
+	cout << "(" << tree[1] << ")" << endl;
+      }
+      print(tree, 2);
     }
   }
   return 0;
 }
 
 void print(int* tree, int i){
-  int last = getLast(tree);
-  int left = getLeft(i);
-  int right = getRight(i);
+  if(tree[i] == -1){
+    //we've reached the end of the tree
+    return;
+  }
   cout << "(";
-  if(tree[left] > -1){
-    cout << tree[left] << ",";
+  for(int j = i; j < i*2; j++){
+    //visualize a tree - index of array at first node of new row = nodes in that row
+    if(tree[j] == -1){
+      cout << "N" << ",";
+    }else{
+      cout << tree[j] << ",";
+    }
+    if(j % 2 != 0){
+      cout << ") (";
+    }
   }
-  if(tree[right] > -1){
-    cout << tree[right];
-  }
-  cout << ") ";
-
-  if(tree[left] > -1 && tree[right] > -1){
-    print(tree, left);
-    print(tree, right);
-  }
+  cout << ")" << endl;
+  print(tree, i*2);
 }
 
 int* pop(int* tree, int i){
-  if(getLeft(1) == -1 && getRight(1) == -1){
-    tree[1] = -1;
+  int left = tree[getLeft(i)];
+  int right = tree[getRight(i)];
+  int greatest = 0;
+  if(left > right){
+    greatest = left;
+  }else{
+    greatest = right;
+  }
+  tree[i] = greatest;
+
+  if(greatest == -1){
     return tree;
   }
-  if(i == 1){
-    int last = getLast(tree);
+  if(greatest == left){
+    i = getLeft(i);
+  }else{
+    i = getRight(i);
   }
-  int parent = getParent(last);
-  int parentval = tree[parent];
-  int grandparent = getParent(parent);
-  tree[last] = -1;
-  tree[parent] = tree[last];
+  pop(tree, i);
 }
 
 int* checkAdd(int num, int* tree, int child){
@@ -95,10 +139,12 @@ int* checkAdd(int num, int* tree, int child){
 }
 
 int getLast(int* tree){
-  for(int i = 0; i <= 101; i++){
+  int i = 1;
+  while(true){
     if(tree[i] == -1){
       return i;
     }
+    i++;
   }
   cout << "ERROR: Binary tree is full" << endl;
   return -1;

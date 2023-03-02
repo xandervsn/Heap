@@ -23,7 +23,7 @@ void print(int*, int);
 
 int main(){
   srand(time(0));
-  int* tree = new int[101];
+  int* tree = new int[201];
   tree = clear(tree);
   while(true){
     cout << "Input a valid command (ADD, DLT, DLTALL, PRINT)" << endl;
@@ -118,15 +118,9 @@ int* pop(int* tree, int i){
   }else{
     greatest = right;
   }
-
-  if(left > 100 || right > 100){
-    tree[getLast(tree) - 1] = -1;
-    return tree;
-  }
-
-
+  
   tree[i] = greatest;
-
+      
   if(greatest == -1){
     return tree;
   }
@@ -198,7 +192,7 @@ int getParent(int i){
 
 int* clear(int* tree){
   //init arr
-  for(int i = 0; i <= 101; i++){
+  for(int i = 0; i <= 201; i++){
     tree[i] = -1;
   }
   tree[0] = -2;

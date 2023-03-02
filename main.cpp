@@ -33,52 +33,52 @@ int main(){
       cout << "Add by user (U) or file input (F)?" << endl;
       cin >> input;
       if(strcmp(input, "U") == 0){
-	int intin = 0;
-	cin >> intin;
+        int intin = 0;
+        cin >> intin;
         tree = add(intin, tree);
       }else if(strcmp(input, "F") == 0){
-	cout << "How many numbers to add? (0-50)" << endl;
-	int intin = 0;
-	cin >> intin;
+        cout << "How many numbers to add? (0-50)" << endl;
+        int intin = 0;
+        cin >> intin;
 
-	for(int i = 0; i < intin; i++){
-	  //follwing code taken from Hashmap
-	  ifstream firstFile;
-	  firstFile.open("nums.txt");
-	  char arr[100][50];
-	  int j = 0;
-	  while(firstFile.getline(arr[j], 49, ' ')){
-	    j++;
-	  }
-	  //pick random name from created char* array above
-	  int random = rand() % 10;
-	  //turn that char* into an int
-	  int num = atoi(arr[random]);
-	  tree = add(num, tree);
-	}
+        for(int i = 0; i < intin; i++){
+          //follwing code taken from Hashmap
+          ifstream firstFile;
+          firstFile.open("nums.txt");
+          char arr[100][50];
+          int j = 0;
+          while(firstFile.getline(arr[j], 49, ' ')){
+            j++;
+          }
+          //pick random name from created char* array above
+          int random = rand() % 10;
+          //turn that char* into an int
+          int num = atoi(arr[random]);
+          tree = add(num, tree);
+        }
       }
     }else if(strcmp(input, "DLT") == 0){
       if(tree[1] == -1){
-	cout << "This heap is empty!" << endl;
+        cout << "This heap is empty!" << endl;
       }else{
-	cout << tree[1] << endl;
+        cout << tree[1] << endl;
       }
       tree = pop(tree, 1);
     }else if(strcmp(input, "DLTALL") == 0){
       //slight redunancy, otherwise some nums not popped
       for(int i = 0; i <= 100; i++){
-	//if a node has a value, print it, then pop
-	if(tree[1] != -1){
-	  cout << tree[1] << endl;
-	}
-	tree = pop(tree, 1);
+        //if a node has a value, print it, then pop
+        if(tree[1] != -1){
+          cout << tree[1] << endl;
+        }
+        tree = pop(tree, 1);
       }
     }else if(strcmp(input, "PRINT") == 0){
       if(tree[1] == -1){
         cout << "This heap is empty!" << endl;
       }else{
-	cout << "Each ordered pair corresponds to 1 parent, which is the 1st value in the above ordered pair." << endl;
-	cout << "(" << tree[1] << ")" << endl;
+        cout << "Each ordered pair corresponds to 1 parent, which is the 1st value in the above ordered pair." << endl;
+        cout << "(" << tree[1] << ")" << endl;
       }
       print(tree, 2);
     }
@@ -118,6 +118,13 @@ int* pop(int* tree, int i){
   }else{
     greatest = right;
   }
+
+  if(left > 100 || right > 100){
+    tree[getLast(tree) - 1] = -1;
+    return tree;
+  }
+
+
   tree[i] = greatest;
 
   if(greatest == -1){
@@ -163,6 +170,9 @@ int getLast(int* tree){
 int* add(int num, int* tree){
   //pretty boilerplate, real stuff in checkAdd
   int i = getLast(tree);
+  if(i == 100){
+    return tree;
+  }
   tree[i] = num;
   tree = checkAdd(num, tree, i);
   return tree;

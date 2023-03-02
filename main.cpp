@@ -77,6 +77,7 @@ int main(){
       if(tree[1] == -1){
         cout << "This heap is empty!" << endl;
       }else{
+	cout << "Each ordered pair corresponds to 1 parent, which is the 1st value in the above ordered pair." << endl;
 	cout << "(" << tree[1] << ")" << endl;
       }
       print(tree, 2);
@@ -86,15 +87,16 @@ int main(){
 }
 
 void print(int* tree, int i){
-  if(tree[i] == -1){
+  if(tree[i] == -1 || i > 100){
     //we've reached the end of the tree
     return;
   }
   cout << "(";
   for(int j = i; j < i*2; j++){
     //visualize a tree - index of array at first node of new row = nodes in that row
-    if(tree[j] == -1){
-      cout << "N" << ",";
+    if(tree[j] == -1 || i > 100){
+      cout << ")" << endl;
+      return;
     }else{
       cout << tree[j] << ",";
     }
